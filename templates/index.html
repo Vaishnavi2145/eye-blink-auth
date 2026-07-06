@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Home • Eye Blink Auth{% endblock %}
+
+{% block content %}
+<section class="grid md:grid-cols-2 gap-8 items-center mt-10">
+    <div class="text-white">
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow">
+            Password Authentication using Eye Blink
+        </h1>
+        <p class="mt-4 text-lg">
+            Sign up with your details and your unique blink-count. Next time you login, just blink the same count.
+            Simple, secure, fun.
+        </p>
+        <div class="mt-6 flex gap-3">
+            <a href="{{ url_for('signup') }}"
+                class="px-6 py-3 rounded-2xl bg-white text-indigo-700 font-semibold shadow hover:shadow-lg">Get
+                Started</a>
+            <a href="{{ url_for('login') }}"
+                class="px-6 py-3 rounded-2xl bg-indigo-800 text-white font-semibold hover:bg-indigo-900">Login</a>
+        </div>
+    </div>
+    <div class="bg-white/20 rounded-3xl p-6 backdrop-blur shadow-xl">
+        <video src="../static/blinkingvid.mp4" class="w-full rounded-2xl border border-white/30" muted autoplay
+            playsinline></video>
+        <p class="text-sm text-white/90 mt-2">Camera preview appears on signup/login pages.</p>
+    </div>
+</section>
+{% endblock %}

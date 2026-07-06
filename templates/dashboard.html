@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="mt-10 bg-white/20 backdrop-blur rounded-3xl p-8 shadow text-white">
+    <h1 class="text-3xl font-extrabold">Welcome, {{ name }} 🎉</h1>
+    <p class="mt-3">You’re logged in using blink-based authentication.</p>
+
+    <!-- Buttons -->
+    <div class="mt-6 space-x-3">
+        <!-- Upload Button triggers modal -->
+        <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
+            class="px-5 py-2 rounded-xl bg-green-600 hover:bg-green-700">Upload File</button>
+
+        <a href="{{ url_for('files') }}" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700">View Files</a>
+
+        <a href="{{ url_for('logout') }}" class="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800">Logout</a>
+    </div>
+</section>
+
+<!-- Upload Modal -->
+<div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-2xl shadow-lg w-96 text-gray-800">
+        <h2 class="text-xl font-bold mb-4">Upload File</h2>
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" class="block w-full mb-4 border p-2 rounded" required />
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')"
+                    class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancel</button>
+                <button type="submit"
+                    class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

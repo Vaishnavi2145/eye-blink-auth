@@ -1,0 +1,68 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Eye Blink Auth{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:,">
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-fuchsia-400 via-indigo-400 to-sky-400">
+    <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="bg-white/20 backdrop-blur sticky top-0 z-50 shadow">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="{{ url_for('index') }}" class="text-white font-bold tracking-wide text-xl">
+                    👀 BlinkAuth
+                </a>
+                <div class="space-x-3">
+                    {% if session.get('user_email') %}
+                    <!-- Logged-in nav -->
+                    <a href="{{ url_for('dashboard') }}" class="text-white hover:underline">Dashboard</a>
+                    <a href="{{ url_for('logout') }}" class="text-white hover:underline">Logout</a>
+                    {% else %}
+                    <!-- Guest nav -->
+                    <a href="{{ url_for('index') }}" class="text-white hover:underline">Home</a>
+                    <a href="{{ url_for('signup') }}"
+                        class="px-4 py-2 rounded-2xl bg-white text-indigo-700 font-semibold hover:shadow">Sign Up</a>
+                    <a href="{{ url_for('login') }}"
+                        class="px-4 py-2 rounded-2xl bg-indigo-700 text-white font-semibold hover:bg-indigo-800">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Flash messages -->
+    <div class="max-w-3xl mx-auto mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="space-y-2">
+            {% for category, msg in messages %}
+            <div class="px-4 py-3 rounded-xl shadow text-white
+                        {% if category == 'success' %} bg-emerald-600
+                        {% elif category == 'error' %} bg-rose-600
+                        {% else %} bg-slate-800 {% endif %}">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Page content will come here -->
+    <main class="max-w-6xl mx-auto p-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Extra scripts for specific pages -->
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

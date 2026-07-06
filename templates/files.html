@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Files{% endblock %}
+
+{% block content %}
+<section class="mt-10 bg-white/20 backdrop-blur rounded-3xl p-8 shadow text-white">
+    <h1 class="text-2xl font-extrabold mb-4">Your Uploaded Files</h1>
+
+    {% if files %}
+    <ul class="divide-y divide-white/30">
+        {% for f in files %}
+        <li class="py-2 flex justify-between items-center">
+            <span>{{ f }}</span>
+            <a href="{{ url_for('download', email=email, filename=f) }}"
+                class="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white">Download</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No files uploaded yet.</p>
+    {% endif %}
+
+    <div class="mt-6">
+        <a href="{{ url_for('dashboard') }}"
+            class="px-5 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-800">Back to Dashboard</a>
+    </div>
+</section>
+{% endblock %}

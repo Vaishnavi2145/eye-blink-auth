@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Sign Up • Eye Blink Auth{% endblock %}
+
+{% block content %}
+<div class="grid md:grid-cols-2 gap-8 mt-6">
+    <form method="POST" class="bg-white/20 backdrop-blur rounded-3xl p-6 shadow text-white">
+        <h2 class="text-2xl font-bold mb-4">Create Account</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block mb-1">Name</label>
+                <input name="name" required class="w-full px-4 py-2 rounded-xl bg-white/80 text-slate-800" />
+            </div>
+            <div>
+                <label class="block mb-1">Email</label>
+                <input name="email" type="email" required
+                    class="w-full px-4 py-2 rounded-xl bg-white/80 text-slate-800" />
+            </div>
+            <div>
+                <label class="block mb-1">Phone</label>
+                <input name="phone" class="w-full px-4 py-2 rounded-xl bg-white/80 text-slate-800" />
+            </div>
+            <div>
+                <label class="block mb-1">Gender</label>
+                <select name="gender" class="w-full px-4 py-2 rounded-xl bg-white/80 text-slate-800">
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block mb-1">Address</label>
+                <textarea name="address" rows="2"
+                    class="w-full px-4 py-2 rounded-xl bg-white/80 text-slate-800"></textarea>
+            </div>
+        </div>
+
+        <!-- Blink counter display -->
+        <div class="mt-6 bg-white/10 rounded-2xl p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm opacity-90">Blink Count</p>
+                    <p id="blinkCount" class="text-4xl font-extrabold">0</p>
+                </div>
+                <div class="space-x-2">
+                    <button type="button" id="startCam" class="px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800">Start
+                        Camera</button>
+                    <button type="button" id="resetBtn"
+                        class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700">Reset</button>
+                </div>
+            </div>
+            <input type="hidden" name="blink_count" id="blinkInput" value="0" />
+        </div>
+
+        <div class="mt-6">
+            <button type="button" id="submitBtn"
+                class="w-full px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 font-semibold">
+                Submit & Save
+            </button>
+            <p class="text-sm mt-2 opacity-90">Make your blinks, then click Submit. Your details + blink count will be
+                stored.</p>
+        </div>
+    </form>
+
+    <!-- Camera & canvas preview -->
+    <div class="bg-white/20 backdrop-blur rounded-3xl p-6 shadow text-white">
+        <h3 class="text-xl font-bold mb-3">Live Camera</h3>
+        <video id="video" class="w-full rounded-2xl border border-white/30" playsinline muted></video>
+        <canvas id="overlay" class="w-full rounded-2xl mt-3 border border-white/30"></canvas>
+        <p class="text-sm mt-2">We detect eye landmarks to count blinks. Use good lighting.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- MediaPipe FaceMesh + camera utils -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<script src="{{ url_for('static', filename='blink.js') }}"></script>
+<script>
+    // Initialize blink module for this page
+    window.BlinkAuth.init({
+        videoId: "video",
+        canvasId: "overlay",
+        countElId: "blinkCount",
+        hiddenInputId: "blinkInput",
+        startBtnId: "startCam",
+        resetBtnId: "resetBtn"
+    });
+</script>
+
+<script>
+    document.getElementById("submitBtn").addEventListener("click", () => {
+        // STOP browser camera
+        if (window.BlinkAuth && window.BlinkAuth.stopCamera) {
+            window.BlinkAuth.stopCamera();
+        }
+
+        // small delay to ensure camera is released
+        setTimeout(() => {
+            document.querySelector("form").submit();
+        }, 500);
+    });
+</script>
+
+{% endblock %}
